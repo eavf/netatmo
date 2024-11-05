@@ -85,11 +85,11 @@ Access the application at [http://localhost:5000](http://localhost:5000).
 
 ## Routes
 
-[/initialize_tokens](http://localhost:5000/initialize_tokens): Initialize or update access tokens and credentials.
-[/show_data_table](http://localhost:5000/show_data_table): View all weather station and module data.
-[/show_all_measurements](http://localhost:5000/show_all_measurements): View all measurement data for the weather stations.
-[/get_data](http://localhost:5000/get_data): Fetches current data from the Netatmo API.
-[http://localhost:8000](http://localhost:8000): Run phpMyAdmin
+[/initialize_tokens](http://localhost:5000/initialize_tokens): Initialize or update access tokens and credentials.  
+[/show_data_table](http://localhost:5000/show_data_table): View all weather station and module data.  
+[/show_all_measurements](http://localhost:5000/show_all_measurements): View all measurement data for the weather stations.  
+[/get_data](http://localhost:5000/get_data): Fetches current data from the Netatmo API.  
+[http://localhost:8000](http://localhost:8000): Run phpMyAdmin  
 
 ## Deployment
 This application is ready for deployment on Docker Hub and GitHub.
