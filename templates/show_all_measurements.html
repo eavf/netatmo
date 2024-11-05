@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>All Measurements Data</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        table, th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h2>All Measurements Data</h2>
+    <table>
+        <thead>
+            <tr>
+                {% if measurements_data and measurements_data[0] %}
+                    {% for column in measurements_data[0].keys() %}
+                        <th>{{ column }}</th>
+                    {% endfor %}
+                {% else %}
+                    <th>No Measurement Data Available</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for measurement in measurements_data %}
+                <tr>
+                    {% for value in measurement.values() %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

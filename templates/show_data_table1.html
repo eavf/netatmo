@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Weather Station Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Select Weather Station</h2>
+
+        <!-- Dropdown for selecting a station -->
+        <select id="stationDropdown" onchange="showStationData()">
+            <option value="">Select a Station</option>
+            {% for station in weather_data %}
+                <option value="{{ station.station_id }}">{{ station.station_name }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Station Information Section -->
+        <div id="stationInfo" class="station-info">
+            <h3>Station Information</h3>
+            <div id="stationDetails"></div>
+        </div>
+
+        <!-- Table for Displaying Module Data -->
+        <div class="table-container" id="modulesTable">
+            <h3>Modules Data</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Module ID</th>
+                        <th>Station ID</th>
+                        <th>Type</th>
+                        <th>Data Type</th>
+                        <th>Reachable</th>
+                        <th>Firmware</th>
+                        <th>Last Message</th>
+                        <th>Last Seen</th>
+                    </tr>
+                </thead>
+                <tbody id="modulesData"></tbody>
+            </table>
+        </div>
+
+        <!-- Table for Displaying Measurements Data -->
+        <div class="table-container" id="measurementsDataTable">
+            <h3>Measurements Data</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Station ID</th>
+                        <th>Pressure</th>
+                        <th>Pressure Time (UTC)</th>
+                        <th>Absolute Pressure</th>
+                        <th>Absolute Pressure Time (UTC)</th>
+                        <th>Temperature</th>
+                        <th>Temperature Time (UTC)</th>
+                        <th>Humidity</th>
+                        <th>Humidity Time (UTC)</th>
+                        <th>Noise</th>
+                        <th>Noise Time (UTC)</th>
+                        <th>Min Temperature</th>
+                        <th>Min Temperature Time (UTC)</th>
+                        <th>Max Temperature</th>
+                        <th>Max Temperature Time (UTC)</th>
+                        <th>Rain</th>
+                        <th>Rain Time (UTC)</th>
+                        <th>1 Hour Rain Sum</th>
+                        <th>1 Hour Rain Sum Time (UTC)</th>
+                        <th>24 Hour Rain Sum</th>
+                        <th>24 Hour Rain Sum Time (UTC)</th>
+                        <th>Wind Strength</th>
+                        <th>Wind Strength Time (UTC)</th>
+                        <th>Wind Angle</th>
+                        <th>Wind Angle Time (UTC)</th>
+                        <th>Gust Strength</th>
+                        <th>Gust Strength Time (UTC)</th>
+                        <th>Gust Angle</th>
+                        <th>Gust Angle Time (UTC)</th>
+                    </tr>
+                </thead>
+                <tbody id="measurementsData">
+                    <!-- Measurement data rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+            const stationData = {{ weather_data | tojson }};
+            const modulesData = {{ modules_by_station | tojson }};
+            const measurementsData = {{ measurements_by_station | tojson }};
+
+            function showStationData() {
+                const stationDropdown = document.getElementById('stationDropdown');
+                const selectedStationId = stationDropdown.value;
+                const stationInfoDiv = document.getElementById('stationInfo');
+                const modulesTableDiv = document.getElementById('modulesTable');
+                const measurementsTableDiv = document.getElementById('measurementsDataTable');  // správne ID
+                const stationDetailsDiv = document.getElementById('stationDetails');
+                const modulesDataTbody = document.getElementById('modulesData');
+                const measurementsDataTbody = document.getElementById('measurementsData');
+
+                // Clear previous data
+                stationDetailsDiv.innerHTML = '';
+                modulesDataTbody.innerHTML = '';
+                measurementsDataTbody.innerHTML = '';
+
+                if (selectedStationId) {
+                    // Show station information
+                    const station = stationData.find(s => s.station_id === selectedStationId);
+                    stationDetailsDiv.innerHTML = `
+                        <p><strong>Station Name:</strong> ${station.station_name}</p>
+                        <p><strong>Location:</strong> ${station.place}</p>
+                        <p><strong>Type:</strong> ${station.type}</p>
+                        <p><strong>Reachable:</strong> ${station.reachable ? 'Yes' : 'No'}</p>
+                    `;
+
+                    // Show module data
+                    const modules = modulesData[selectedStationId] || [];
+                    modules.forEach(module => {
+                        const row = document.createElement('tr');
+                        Object.values(module).forEach(value => {
+                            const cell = document.createElement('td');
+                            cell.innerText = value !== undefined ? value : '';  // Default value
+                            row.appendChild(cell);
+                        });
+                        modulesDataTbody.appendChild(row);
+                    });
+
+                    // Show measurements data in defined order
+                    const measurements = measurementsData[selectedStationId] || [];
+                    measurements.forEach(measurement => {
+                        const row = document.createElement('tr');
+
+                        // Defined order of columns based on table headers
+                        const orderedValues = [
+                            measurement.station_id, measurement.pressure, measurement.time_utc_pressure,
+                            measurement.absolute_pressure, measurement.time_utc_absolute_pressure,
+                            measurement.temperature, measurement.time_utc_temperature,
+                            measurement.humidity, measurement.time_utc_humidity, measurement.noise,
+                            measurement.time_utc_noise, measurement.min_temp, measurement.time_utc_min_temp,
+                            measurement.max_temp, measurement.time_utc_max_temp, measurement.rain,
+                            measurement.time_utc_rain, measurement.sum_rain_1, measurement.time_utc_sum_rain_1,
+                            measurement.sum_rain_24, measurement.time_utc_sum_rain_24, measurement.wind_strength,
+                            measurement.time_utc_wind_strength, measurement.wind_angle, measurement.time_utc_wind_angle,
+                            measurement.gust_strength, measurement.time_utc_gust_strength, measurement.gust_angle,
+                            measurement.time_utc_gust_angle
+                        ];
+
+                        // Populate row cells in the correct order
+                        orderedValues.forEach(value => {
+                            const cell = document.createElement('td');
+                            cell.innerText = value === undefined ? '' : value;
+                            row.appendChild(cell);
+                        });
+                        measurementsDataTbody.appendChild(row);
+                    });
+
+                    // Display sections
+                    stationInfoDiv.style.display = 'block';
+                    modulesTableDiv.style.display = 'block';
+                    measurementsTableDiv.style.display = 'block';
+                } else {
+                    // Hide sections if no station is selected
+                    stationInfoDiv.style.display = 'none';
+                    modulesTableDiv.style.display = 'none';
+                    measurementsTableDiv.style.display = 'none';
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>

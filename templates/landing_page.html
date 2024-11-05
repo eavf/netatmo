@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Landing Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Station Data Management</h1>
+
+        <!-- Stav konektivity -->
+        <h3>Connectivity Status:</h3>
+        <ul>
+            <li>Client ID: {{ "Set" if connection_status.CLIENT_ID else "Not Set" }}</li>
+            <li>Client Secret: {{ "Set" if connection_status.CLIENT_SECRET else "Not Set" }}</li>
+            <li>Access Token: {{ "Valid" if connection_status.ACCESS_TOKEN else "Not Set" }}</li>
+            <li>Token Expiry: {{ "Valid" if connection_status.TOKEN_EXPIRY else "Expired" }}</li>
+        </ul>
+
+        {% if all_keys_set %}
+            <p style="color: green;">All connectivity settings are correctly configured.</p>
+        {% else %}
+            <p style="color: red;">Please complete all required settings before accessing the routes.</p>
+        {% endif %}
+
+        <!-- Odkazy na všetky existujúce routes -->
+        <h3>Available Routes:</h3>
+        <ul>
+            <li><a href="{{ url_for('initialize_tokens') }}">Initialize Tokens and Client Credentials</a></li>
+            <li><a href="{{ url_for('show_data_table') }}">Show Weather Station Data</a></li>
+            <li><a href="{{ url_for('show_all_measurements') }}">Show All Measurements</a></li>
+            <li><a href="{{ url_for('get_data') }}">Get Data from API</a></li>
+            <li><a href="{{ url_for('store_data') }}">Store Data to Database</a></li>
+            <li><a href="http://localhost:8080" target="_blank">phpMyAdmin</a></li> <!-- Adjust port if needed -->
+        </ul>
+    </div>
+</body>
+</html>

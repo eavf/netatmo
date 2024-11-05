@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Weather Data with Modules</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        table, th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .module-table { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Weather Station Data</h2>
+    <table>
+        <thead>
+            <tr>
+                {% for column in weather_data[0].keys() %}
+                    <th>{{ column }}</th>
+                {% endfor %}
+                <th>Modules</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for station in weather_data %}
+                <tr>
+                    {% for value in station.values() %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                    <td>
+                        <table class="module-table">
+                            <thead>
+                                <tr>
+                                    {% if modules_by_station.get(station["id"]) %}
+                                        {% for module_column in modules_by_station[station["id"]][0].keys() %}
+                                            <th>{{ module_column }}</th>
+                                        {% endfor %}
+                                    {% else %}
+                                        <th>No Modules</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for module in modules_by_station.get(station["id"], []) %}
+                                    <tr>
+                                        {% for module_value in module.values() %}
+                                            <td>{{ module_value }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

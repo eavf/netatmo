@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Initialize Tokens, Client Credentials, and API Endpoints</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f6f8;
+        }
+        .container {
+            width: 600px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 15px;
+            display: block;
+            color: #555;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enter Tokens, Credentials, and Endpoints</h2>
+        <form method="POST" action="/initialize_tokens">
+            <label for="access_token">Access Token:</label>
+            <input type="text" id="access_token" name="access_token" value="{{ access_token }}">
+
+            <label for="refresh_token">Refresh Token:</label>
+            <input type="text" id="refresh_token" name="refresh_token" value="{{ refresh_token }}">
+
+            <label for="client_id">Client ID:</label>
+            <input type="text" id="client_id" name="client_id" value="{{ client_id }}">
+
+            <label for="client_secret">Client Secret:</label>
+            <input type="text" id="client_secret" name="client_secret" value="{{ client_secret }}">
+
+            <label for="api_url">API URL ENDPOINT:</label>
+            <input type="text" id="api_url" name="api_url" value="{{ api_url }}">
+
+            <label for="token_url">Token URL:</label>
+            <input type="text" id="token_url" name="token_url" value="{{ token_url }}">
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
