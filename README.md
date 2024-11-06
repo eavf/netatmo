@@ -85,10 +85,8 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    image: eavfeavf/weather-station-app:latest  # Použitie obrazu z DockerHub
     container_name: flask_app
-    volumes:
-      - .:/app  # Mounts the current directory to /app in the container
     ports:
       - "5000:5000"
     environment:
@@ -139,6 +137,16 @@ Replace yourpassword (all passwords) with a secure password, and make sure the .
 
 #### Start the application using Docker Compose
 Ensure you are in the folder containing the docker-compose.yml file, then run:
+
+```bash
+docker-compose pull     # to pull image from dockerhub
+docker-compose up -d    # to run app
+```
+If you prefer to build localy image, so do it by changing image instruction in app:
+```bash
+build: .
+```
+and buil it locally by:
 ```bash
 docker-compose up --build
 ```
