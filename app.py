@@ -31,7 +31,7 @@ TOKEN_URL = os.getenv("TOKEN_URL", "https://api.netatmo.com/oauth2/token")
 # Tokens
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
-TOKEN_EXPIRY = datetime.fromtimestamp(float(os.getenv("TOKEN_EXPIRY", "0")))
+TOKEN_EXPIRY = datetime.fromtimestamp(float(os.getenv("TOKEN_EXPIRY", datetime.now().timestamp())))
 
 
 @app.route("/")
