@@ -495,4 +495,4 @@ scheduler.add_job(scheduled_store_data, 'interval', minutes=15)
 scheduler.start()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=55111)
+    app.run(host="0.0.0.0", port=5000)
