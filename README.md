@@ -11,7 +11,6 @@ A Flask-based web application to monitor weather data from Netatmo stations. Thi
   - [Running Locally](#running-locally)
   - [Running with Docker](#running-with-docker)
 - [Routes](#routes)
-- [Deployment](#deployment)
 - [Contributing](#contributing)
 
 ## Features
@@ -69,44 +68,90 @@ Access the application at [http://localhost:5000](http://localhost:5000).
 
 ### Running with Docker
 
-#### Build Docker Image
+For projects that have multiple services or containers (like this application with a database and the Flask application), Docker Compose can help manage them in a single configuration file. This guide explains how to download and run the this application, along with its MySQL database and phpMyAdmin interface, using a pre-built Docker image from DockerHub.
+
+#### Prerequisities
+Ensure you have Docker and Docker Compose installed on your system. You can check if it’s installed by running:
+```bash
+docker-compose --version
+```
+If it’s not installed, you can install it by following the official Docker Compose installation guide.
+
+#### Setting Up Docker Compose
+1. Create docker-compose.yml file in the root of the project directory with the following configuration:
 
 ```bash
-docker build -t your-dockerhub-username/weather-station-app .
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: flask_app
+    volumes:
+      - .:/app  # Mounts the current directory to /app in the container
+    ports:
+      - "5000:5000"
+    environment:
+      - ACCESS_TOKEN=${ACCESS_TOKEN}
+      - REFRESH_TOKEN=${REFRESH_TOKEN}
+      - MYSQL_HOST=db
+      - MYSQL_USER=vovo
+      - MYSQL_PASSWORD=vovo_pass_sql
+      - MYSQL_DATABASE=vovo
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: vovo
+      MYSQL_USER: vovo
+      MYSQL_PASSWORD: vovo_pass_sql
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Initializes the DB schema
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_natatmo
+    environment:
+      PMA_HOST: db  # Links to the `db` service
+      MYSQL_ROOT_PASSWORD: root_password  # Root password of MySQL
+    ports:
+      - "8080:80"  # Expose phpMyAdmin on localhost:8080
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
 ```
+2. Or clone github repository.
+This repository contains the necessary docker-compose.yml file to orchestrate the multi-container setup:
+```bash
+git clone https://github.com/eavf/netatmo.git
+cd netatmo
+```
+Replace yourpassword (all passwords) with a secure password, and make sure the .env file is present in the root directory with your API credentials and other environment variables. You can add them as well via web menu after having run the App.
 
-#### Run Docker Container with Environment Variables
-
-```bash 
-docker run --env-file .env -p 5000:5000 your-dockerhub-username/weather-station-app
-``` 
-
+#### Start the application using Docker Compose
+Ensure you are in the folder containing the docker-compose.yml file, then run:
+```bash
+docker-compose up --build
+```
+Or without --built if you didnt change image configuration.  
 Access the application at [http://localhost:5000](http://localhost:5000).
 
 ## Routes
-
+(links will work only on computer where is running app.)
 [/initialize_tokens](http://localhost:5000/initialize_tokens): Initialize or update access tokens and credentials.  
 [/show_data_table](http://localhost:5000/show_data_table): View all weather station and module data.  
 [/show_all_measurements](http://localhost:5000/show_all_measurements): View all measurement data for the weather stations.  
 [/get_data](http://localhost:5000/get_data): Fetches current data from the Netatmo API.  
 [http://localhost:8000](http://localhost:8000): Run phpMyAdmin  
-
-## Deployment
-This application is ready for deployment on Docker Hub and GitHub.
-
-### Push to GitHub
-
-```bash
-git push -u origin main
-```
-
-#### Push Docker Image to Docker Hub
-
-```bash
-docker login
-docker tag your-dockerhub-username/weather-station-app:latest your-dockerhub-username/weather-station-app:latest
-docker push your-dockerhub-username/weather-station-app:latest
-```
 
 ## Contributing
 If you'd like to contribute, please fork the repository and use a feature branch. Pull requests are welcome.
