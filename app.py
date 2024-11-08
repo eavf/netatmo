@@ -50,6 +50,25 @@ def landing_page():
     return render_template("landing_page.html", connection_status=connection_status, all_keys_set=all_keys_set)
 
 
+def ensure_env_file_exists():
+    """Checks if .env file exists, creates it from .env.example if not."""
+    env_file_path = ".env"
+    example_env_file_path = ".env.example"
+
+    if not os.path.exists(env_file_path):
+        if os.path.exists(example_env_file_path):
+            with open(example_env_file_path, 'r') as example_file:
+                content = example_file.read()
+            with open(env_file_path, 'w') as env_file:
+                env_file.write(content)
+            print(f"Created {env_file_path} from {example_env_file_path}.")
+        else:
+            # Create an empty .env if no example exists
+            with open(env_file_path, 'w') as env_file:
+                env_file.write("# Environment variables\n")
+            print(f"Created an empty {env_file_path}.")
+
+
 @app.route("/initialize_tokens", methods=["GET", "POST"])
 def initialize_tokens():
     """Webpage to initialize or update access/refresh tokens, client ID, client secret, and API endpoints."""
@@ -64,6 +83,9 @@ def initialize_tokens():
         new_api_url = request.form.get("api_url")
         new_token_url = request.form.get("token_url")
         TOKEN_EXPIRY = datetime.now() + timedelta(seconds=3600)  # Set token expiry to 1 hour
+        
+        # Ensure .env exists before initializing tokens
+        ensure_env_file_exists()
 
         # Update environment file with new values, only if provided
         update_env_file("ACCESS_TOKEN", ACCESS_TOKEN)

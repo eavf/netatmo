@@ -1,0 +1,6 @@
+docker build --no-cache -t eavfeavf/weather-station-app:latest .
+
+docker run -p 5000:5000 eavfeavf/weather-station-app:latest
+
+docker push eavfeavf/weather-station-app:latest
+
