@@ -1,7 +1,7 @@
 # Weather Station Data Monitoring Application
 
-A Flask-based web application for monitoring weather data from Netatmo stations. It is designed to learn and use Python, Flask and the API.  
-This application retrieves and stores weather data from the Netatmo API, with functionality to view station data, modules and measurements in an easy to navigate interface. This application comes with a built-in slq server and myPHPadmin. However, there is nothing stopping you from using your own server, just change the database server configuration in app.py and the db section in docker-compose.yml.  
+A Flask-based web application for monitoring weather data from Netatmo stations. It is designed for learning and practicing Python, Flask, and the API.  
+This application retrieves and stores weather data from the Netatmo API, with the functionality to view station data, modules, and measurements in an easy-to-navigate interface. This application comes with a built-in SQL server and myPHPadmin. However, there is nothing to stop you from using your own server, just change the database server configuration in app.py and the db section in docker-compose.yml.
 This is the first part of the project, the second part will deal with ML and using AI for analysis and prediction.
 
 ## Table of Contents
@@ -73,7 +73,7 @@ Access the application at [http://localhost:5000](http://localhost:5000).
 
 For projects that have multiple services or containers (like this application with a database and the Flask application), Docker Compose can help manage them in a single configuration file. We will now look at how to download and run this application, along with its MySQL database and phpMyAdmin interface, using a pre-built Docker image from DockerHub.
 
-#### Prerequisities
+#### Prerequisites
 Ensure you have Docker and Docker Compose installed on your system. You can check if it’s installed by running:
 ```bash
 docker --version
@@ -146,7 +146,7 @@ Ensure you are in the folder containing the docker-compose.yml file, then run:
 docker-compose pull     # to pull image from dockerhub
 docker-compose up -d    # to run app
 ```
-If you prefer to build localy image, so go into app folder and do it by changing image instruction in app by:
+If you prefer to build local image, so go into the app folder and do it by changing the image instruction in the app:
 ```bash
 build: .
 ```
@@ -163,12 +163,12 @@ Access the application at [http://localhost:5000](http://localhost:5000).
 [/show_all_measurements](http://localhost:5000/show_all_measurements): View all measurement data for the weather stations.  
 [/get_data](http://localhost:5000/get_data): Fetches current data from the Netatmo API.  
 [http://localhost:8000](http://localhost:8000): Run phpMyAdmin  
-The links will only work on the computer where the application is running. If you want to run it on a server, you need to modify the configuration of the server itself, reconcile the ports to which the communication is eevntually redirected, and especially in the case of a production server, modify the application to run in a publicly accessible location (see the flash documentation).  
+The links will only work on the computer running the application. If you want to run it on a server, you will need to modify the configuration of the server itself, adjust the ports to which the communication is eventually redirected and, especially in the case of a production server, modify the application to run in a publicly accessible location (see the Flash documentation).  
 Note that if you have not previously stored data in the database, any listing from it will be empty.
 
 ## Disclaimer
-The application requires a development account on netatmo.com, where the relevant documentation for the netatmo API is also available and where you can create the necessary keys and also obtain the necessary devices such as weather monitoring stations, thermostatic heads and other interesting devices to build a smart home. 
-The project is a development project, not a production application, if you don't know the difference between the two, don't use it on the Internet. 
+The application requires a development account on netatmo.com, where you can also find the relevant documentation for the Netatmo API, create the necessary keys and get the necessary devices such as weather stations, thermostat heads and other interesting devices to build a smart home. 
+This is a development project, not a production application, so if you don't know the difference, don't use it on the Internet.
 
 
 ## Contributing
